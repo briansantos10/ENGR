@@ -16,7 +16,7 @@ while True:
 
     # Restart count after 9
     if count > 9:
-        number = 1
+        count = 1
 
 # Clear the display after exiting
 display.clear()
