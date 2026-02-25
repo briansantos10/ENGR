@@ -2,12 +2,10 @@ from microbit import *
 import cutebot
 import log
 
-# --- Parameters ---
-LOG_INTERVAL_MS = 250  # 0.25 seconds
-TOTAL_TIME_MS = 15000  # 15 seconds
-BLINK_PERIOD_MS = 200  # 5 Hz blink: 100ms on, 100ms off
+LOG_INTERVAL_MS = 250  
+TOTAL_TIME_MS = 15000 
+BLINK_PERIOD_MS = 200
 
-# --- Initialize log ---
 log.set_labels("time_ms", "distance_cm")
 
 # Sequence of movements (action, duration in ms)
@@ -25,11 +23,9 @@ next_log = 0
 blink_state = False
 blink_timer = running_time()
 
-# --- Execute movement sequence ---
 for action, duration in sequence:
     action_start = running_time()
     while running_time() - action_start < duration:
-        # --- Movement ---
         if action == "forward":
             cutebot.go_forward()
         elif action == "backward":
@@ -41,7 +37,6 @@ for action, duration in sequence:
         else:
             cutebot.stop()
 
-        # --- Blink blue LEDs at 5Hz ---
         if running_time() - blink_timer >= BLINK_PERIOD_MS // 2:
             blink_state = not blink_state
             if blink_state:
@@ -52,7 +47,6 @@ for action, duration in sequence:
                 cutebot.set_left_rgb_led(0,0,0)
             blink_timer = running_time()
 
-        # --- Logging every 0.25s ---
         elapsed = running_time() - start_time
         if elapsed >= next_log:
             distance = cutebot.get_sonar_distance()
@@ -64,7 +58,7 @@ for action, duration in sequence:
             })
             next_log += LOG_INTERVAL_MS
 
-        sleep(20)  # small delay to reduce CPU usage
+        sleep(20)
 
     cutebot.stop()
     sleep(50)
